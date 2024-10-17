@@ -7,12 +7,17 @@ public class WorkoutTask extends TimerTask {
         workoutList = list;
     }
     public void run() {
-        //if statement to determine whether or not the workout should finish 
-        if (count == Workout.totalWorkouts) {
+
+        // if statement to determine whether or not the workout should finish.
+        // if not, continue the list.
+        if (count == Workout.panel.getTotalWorkouts()) {
             Workout.timer.cancel();
-            System.out.println("You finished your workouts! Congratulations!");
+
+            Workout.panel.setLabel(1, "You finished your workout!");
+            Workout.panel.setLabel(2, "Congratulations!  ");
+            Workout.panel.makeLabelVisible(2);
         } else {
-            System.out.println(workoutList[count++]);
+            Workout.panel.setLabel(1, workoutList[count++]);
         }
     }
 }
