@@ -3,7 +3,10 @@ import java.util.TimerTask;
 import java.util.Scanner;
 // import java.awt.GraphicsEnvironment;
 
-// this class is kind of useless LOL
+// this class is kind of useless LOL.
+// everything's kind of already done inside the
+// WorkoutPanel class, but I feel like a non-panel
+// main-type class should still be in here.
 
 public class Workout {
     public static int totalWorkouts = 5;

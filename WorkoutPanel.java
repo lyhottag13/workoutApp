@@ -74,7 +74,6 @@ public class WorkoutPanel extends JFrame implements ActionListener {
             periodSeconds = Double.parseDouble(field.getText());
             label1.setText("Starting workout!");
             Workout.task = new WorkoutTask(workoutList);
-            // Workout.timer.schedule(Workout.task, 2000,(int) (period * 1000));
             Workout.timer.schedule(Workout.task, 4000, (int) (periodSeconds * 1000));
         }
     }
