@@ -1,7 +1,7 @@
 import java.util.TimerTask;
 
 public class WorkoutTask {
-    // this countdown changes the workout displayed the countdown below it.
+    // this countdown changes the workout displayed and the countdown below it.
     static class CountdownBetter extends TimerTask {
         private int count = Workout.GUI.getPeriodSeconds();
         private int whichWorkout = 0;

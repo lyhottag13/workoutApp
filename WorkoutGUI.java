@@ -2,12 +2,11 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-
-//create a panel for the workout app.
+//create a panel for the workout app, as well as use all the buttons and timers and all that.
 public class WorkoutGUI extends JFrame implements ActionListener {
     
     private JFrame frame;
-    public JPanel panel;
+    private JPanel panel;
     private JLabel label1, label2, balloonLabel;
     private JTextField field;
     private JButton addWorkoutsButton, beginWorkoutButton, setWorkoutsButton;
