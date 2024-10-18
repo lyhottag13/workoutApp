@@ -12,7 +12,8 @@ public class Workout {
     public static int totalWorkouts = 5;
     public static Timer timer = new Timer();
     public static TimerTask task;
-    public static WorkoutPanel panel = new WorkoutPanel();
+    public static TimerTask showTimerTask;
+    public static WorkoutGUI GUI = new WorkoutGUI();
     public static void main(String[] args) {
         
         Scanner scan = new Scanner(System.in);

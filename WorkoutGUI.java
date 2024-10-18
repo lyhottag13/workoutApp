@@ -4,24 +4,30 @@ import java.awt.event.*;
 
 
 //create a panel for the workout app.
-public class WorkoutPanel extends JFrame implements ActionListener {
+public class WorkoutGUI extends JFrame implements ActionListener {
+    
     private JFrame frame;
-    private JPanel panel;
-    private JLabel label1, label2;
+    public JPanel panel;
+    private JLabel label1, label2, balloonLabel;
     private JTextField field;
     private JButton addWorkoutsButton, beginWorkoutButton, setWorkoutsButton;
     private String[] workoutList;
-    private double periodSeconds;
+    private int periodSeconds;
     private int totalWorkouts;
 
     // needed to count how many workouts are added to the list.
     private int index = 0;
-
-    public WorkoutPanel() {
+    public WorkoutGUI() {
+        
         frame = new JFrame("7-Minute Workouts");
         panel = new JPanel();
         label1 = new JLabel("Welcome to the 7-Minute Workout App!");
         label2 = new JLabel("How many exercises would you like to do?");
+        
+        // creates the balloon for later :)
+        ImageIcon balloon = new ImageIcon("Balloons.png");
+        balloonLabel = new JLabel(balloon);
+
         label1.setFont(new Font("Arial", Font.BOLD, 30));
         label2.setFont(new Font("Arial", Font.PLAIN, 25));
         field = new JTextField(10);
@@ -41,15 +47,29 @@ public class WorkoutPanel extends JFrame implements ActionListener {
         panel.add(field);
         panel.add(setWorkoutsButton);
 
+        // creates the buttons and gives them the shortcut of alt + enter, though this is pretty awkward and I hate it.
         addWorkoutsButton.addActionListener(this);
         beginWorkoutButton.addActionListener(this);
         setWorkoutsButton.addActionListener(this);
+        addWorkoutsButton.setMnemonic('\n');
+        beginWorkoutButton.setMnemonic('\n');
+        setWorkoutsButton.setMnemonic('\n');
     }
 
-    public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == setWorkoutsButton) {
-            // creates the String[] with length of totalWorkouts.
-            totalWorkouts = Integer.parseInt(field.getText());
+    public void actionPerformed(ActionEvent event) {
+        if (event.getSource() == setWorkoutsButton) {
+            // creates workoutList with length of totalWorkouts and sets the screen to ask for the workouts.
+            // if the input isn't a positive number, you will be reprimanded.
+            try {
+                totalWorkouts = Integer.parseInt(field.getText());
+            } catch (Exception bad) {
+                label1.setText("Enter a positive whole number!");
+            }
+            if (totalWorkouts <= 0) {
+                label1.setText("Enter a positive whole number!");
+
+                return; 
+            }
             workoutList = new String[totalWorkouts];
             panel.remove(setWorkoutsButton);
             panel.remove(label2);
@@ -57,24 +77,42 @@ public class WorkoutPanel extends JFrame implements ActionListener {
             field.setText("");
             label1.setText("Enter each workout, one at a time.");
             cleanup();
-            // sets the screen to input the workouts to the list.
-        } else if (e.getSource() == addWorkoutsButton) {
+        } else if (event.getSource() == addWorkoutsButton) {
+            // sets the screen to ask for the length of the exercises.
             workoutList[index++] = field.getText();
             field.setText("");
+            // changes the screen to the next once you input all workouts.
             if (index == totalWorkouts) {
+                // removing then adding field is necessary to keep all components in the same order.
                 panel.remove(addWorkoutsButton);
-                label1.setText("Enter exercise length in seconds.");
+                panel.remove(field);
+                label1.setText("Enter each exercise's length in seconds.");
+                label2.setText("");
+                panel.add(label2);
+                panel.add(field);
                 panel.add(beginWorkoutButton);
                 cleanup();
             }
-        } else if (e.getSource() == beginWorkoutButton) {
+        } else if (event.getSource() == beginWorkoutButton) {
+            try {
+                periodSeconds = Integer.parseInt(field.getText());
+                
+            } catch (Exception bad) {
+                label2.setText("Enter a positive whole number!");
+            }
+            if (periodSeconds <= 0) {
+                label2.setText("Enter a positive whole number!");
+                return; 
+            }
             panel.remove(beginWorkoutButton);
             panel.remove(field);
+            panel.add(label2);
+            label2.setText("");
             cleanup();
-            periodSeconds = Double.parseDouble(field.getText());
+            
             label1.setText("Starting workout!");
-            Workout.task = new WorkoutTask(workoutList);
-            Workout.timer.schedule(Workout.task, 4000, (int) (periodSeconds * 1000));
+            Workout.task = new WorkoutTask.CountdownBetter(workoutList);
+            Workout.timer.schedule(Workout.task, 4000, 1000);
         }
     }
 
@@ -109,6 +147,25 @@ public class WorkoutPanel extends JFrame implements ActionListener {
                 break;
             case 2:
                 panel.add(label2);
+                cleanup();
+                break;
+        }
+    }
+    
+    public int getPeriodSeconds() {
+        return periodSeconds;
+    }
+
+
+    public void setBalloons(int on) {
+        // on is 1, off is 0.
+        switch (on) {
+            case 0:
+                panel.remove(balloonLabel);
+                cleanup();
+                break;
+            case 1:
+                panel.add(balloonLabel);
                 cleanup();
                 break;
         }
